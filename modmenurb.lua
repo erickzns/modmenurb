@@ -11,7 +11,7 @@ local function criarNome(jogador)
         local head = char.Head
         local billboard = Instance.new("BillboardGui")
         billboard.Adornee = head
-        billboard.Size = UDim2.new(0, 100, 0, 50)
+        billboard.Size = UDim2.new(0, 50, 0, 25) -- Diminuir o tamanho do BillboardGui
         billboard.StudsOffset = Vector3.new(0, 2, 0)
         billboard.AlwaysOnTop = true
 
@@ -22,6 +22,8 @@ local function criarNome(jogador)
         textLabel.Text = jogador.Name
         textLabel.TextColor3 = Color3.fromRGB(255, 0, 0)
         textLabel.TextScaled = true
+        textLabel.Font = Enum.Font.SourceSans -- Ajustar a fonte
+        textLabel.TextSize = 14 -- Ajustar o tamanho do texto
 
         billboard.Parent = head
     end
