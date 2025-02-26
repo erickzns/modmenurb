@@ -1,62 +1,35 @@
--- Script ESP para desenhar a distância até os jogadores em New Car Development Tycoon
+-- Script de farm para carro correndo infinitamente em New Car Development Tycoon
 
-local RunService = game:GetService("RunService")
 local Players = game:GetService("Players")
 local LocalPlayer = Players.LocalPlayer
+local RunService = game:GetService("RunService")
 
--- Função para criar um BillboardGui com a distância até o jogador
-local function criarDistancia(jogador)
-    local char = jogador.Character
-    if char and char:FindFirstChild("Head") then
-        local head = char.Head
-        local billboard = Instance.new("BillboardGui")
-        billboard.Adornee = head
-        billboard.Size = UDim2.new(0, 100, 0, 50)
-        billboard.StudsOffset = Vector3.new(0, 2, 0)
-        billboard.AlwaysOnTop = true
-
-        local textLabel = Instance.new("TextLabel")
-        textLabel.Parent = billboard
-        textLabel.Size = UDim2.new(1, 0, 1, 0)
-        textLabel.BackgroundTransparency = 1
-        textLabel.TextColor3 = Color3.fromRGB(255, 0, 0)
-        textLabel.TextScaled = true
-        textLabel.Font = Enum.Font.SourceSans
-        textLabel.TextSize = 14
-
-        billboard.Parent = head
-
-        -- Atualizar a distância a cada frame
-        RunService.RenderStepped:Connect(function()
-            if char and char:FindFirstChild("HumanoidRootPart") and LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
-                local distancia = (LocalPlayer.Character.HumanoidRootPart.Position - char.HumanoidRootPart.Position).Magnitude
-                textLabel.Text = string.format("Distância: %.2f", distancia)
-            end
-        end)
-    end
+-- Função para teletransportar o carro para um mundo diferente
+local function teletransportarCarro(carro)
+    local destino = Vector3.new(1000, 0, 1000) -- Coordenadas do mundo diferente
+    carro:SetPrimaryPartCFrame(CFrame.new(destino))
 end
 
--- Função principal para criar e atualizar a distância até os jogadores
-local function espDistancia()
-    -- Crie a distância para todos os jogadores
-    for _, jogador in pairs(Players:GetPlayers()) do
-        if jogador ~= LocalPlayer then
-            jogador.CharacterAdded:Connect(function()
-                criarDistancia(jogador)
-            end)
-            if jogador.Character then
-                criarDistancia(jogador)
-            end
+-- Função para fazer o carro correr infinitamente
+local function correrInfinitamente(carro)
+    local velocidade = 50 -- Ajuste a velocidade conforme necessário
+    RunService.RenderStepped:Connect(function()
+        if carro and carro.PrimaryPart then
+            carro:SetPrimaryPartCFrame(carro.PrimaryPart.CFrame * CFrame.new(0, 0, -velocidade * RunService.RenderStepped:Wait()))
         end
-    end
-
-    -- Adicione a distância para novos jogadores que entrarem no jogo
-    Players.PlayerAdded:Connect(function(jogador)
-        jogador.CharacterAdded:Connect(function()
-            criarDistancia(jogador)
-        end)
     end)
 end
 
--- Execute a função ESP de distância
-espDistancia()
+-- Função principal para iniciar o farm
+local function iniciarFarm()
+    local carro = LocalPlayer.Character:FindFirstChild("Carro") -- Substitua "Carro" pelo nome do modelo do carro
+    if carro then
+        teletransportarCarro(carro)
+        correrInfinitamente(carro)
+    else
+        warn("Carro não encontrado!")
+    end
+end
+
+-- Iniciar o farm
+iniciarFarm()
