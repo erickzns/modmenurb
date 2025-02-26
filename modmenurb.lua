@@ -1,3 +1,6 @@
+local Players = game:GetService("Players")
+local LocalPlayer = Players.LocalPlayer
+
 -- Função para criar um ESP (Extra Sensory Perception) para um jogador
 local function createESP(player)
     if player.Character then
@@ -10,32 +13,21 @@ local function createESP(player)
     end
 end
 
--- Função para remover o ESP de um jogador
-local function removeESP(player)
-    if player.Character then
-        local highlight = player.Character:FindFirstChildOfClass("Highlight")
-        if highlight then
-            highlight:Destroy()
-        end
+-- Adiciona ESP para todos os jogadores atuais, exceto o jogador local
+for _, player in pairs(Players:GetPlayers()) do
+    if player ~= LocalPlayer then
+        createESP(player)
+        player.CharacterAdded:Connect(function()
+            createESP(player)
+        end)
     end
 end
 
--- Adiciona ESP para todos os jogadores atuais
-for _, player in pairs(game.Players:GetPlayers()) do
-    createESP(player)
-    player.CharacterAdded:Connect(function()
-        createESP(player)
-    end)
-end
-
--- Adiciona ESP para novos jogadores que entrarem no jogo
-game.Players.PlayerAdded:Connect(function(player)
-    player.CharacterAdded:Connect(function()
-        createESP(player)
-    end)
-end)
-
--- Remove ESP quando um jogador sair do jogo
-game.Players.PlayerRemoving:Connect(function(player)
-    removeESP(player)
+-- Adiciona ESP para novos jogadores que entrarem no jogo, exceto o jogador local
+Players.PlayerAdded:Connect(function(player)
+    if player ~= LocalPlayer then
+        player.CharacterAdded:Connect(function()
+            createESP(player)
+        end)
+    end
 end)
