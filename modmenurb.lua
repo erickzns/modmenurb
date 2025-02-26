@@ -1,33 +1,48 @@
+-- Script ESP para desenhar nomes dos jogadores em New Car Development Tycoon
+
+local RunService = game:GetService("RunService")
 local Players = game:GetService("Players")
 local LocalPlayer = Players.LocalPlayer
 
--- Função para criar um ESP (Extra Sensory Perception) para um jogador
-local function createESP(player)
-    if player.Character then
-        local highlight = Instance.new("Highlight")
-        highlight.Parent = player.Character
-        highlight.FillColor = Color3.fromRGB(255, 0, 0) -- Cor vermelha
-        highlight.FillTransparency = 0.5
-        highlight.OutlineColor = Color3.fromRGB(255, 255, 255) -- Cor branca
-        highlight.OutlineTransparency = 0
+-- Função para criar um BillboardGui com o nome do jogador
+local function criarNome(jogador)
+    local char = jogador.Character
+    if char and char:FindFirstChild("Head") then
+        local head = char.Head
+        local billboard = Instance.new("BillboardGui")
+        billboard.Adornee = head
+        billboard.Size = UDim2.new(0, 100, 0, 50)
+        billboard.StudsOffset = Vector3.new(0, 2, 0)
+        billboard.AlwaysOnTop = true
+
+        local textLabel = Instance.new("TextLabel")
+        textLabel.Parent = billboard
+        textLabel.Size = UDim2.new(1, 0, 1, 0)
+        textLabel.BackgroundTransparency = 1
+        textLabel.Text = jogador.Name
+        textLabel.TextColor3 = Color3.fromRGB(255, 0, 0)
+        textLabel.TextScaled = true
+
+        billboard.Parent = head
     end
 end
 
--- Adiciona ESP para todos os jogadores atuais, exceto o jogador local
-for _, player in pairs(Players:GetPlayers()) do
-    if player ~= LocalPlayer then
-        createESP(player)
-        player.CharacterAdded:Connect(function()
-            createESP(player)
-        end)
+-- Função principal para criar e atualizar nomes dos jogadores
+local function espNomes()
+    -- Crie nomes para todos os jogadores
+    for _, jogador in pairs(Players:GetPlayers()) do
+        if jogador ~= LocalPlayer then
+            criarNome(jogador)
+        end
     end
+
+    -- Adicione nomes para novos jogadores que entrarem no jogo
+    Players.PlayerAdded:Connect(function(jogador)
+        jogador.CharacterAdded:Connect(function()
+            criarNome(jogador)
+        end)
+    end)
 end
 
--- Adiciona ESP para novos jogadores que entrarem no jogo, exceto o jogador local
-Players.PlayerAdded:Connect(function(player)
-    if player ~= LocalPlayer then
-        player.CharacterAdded:Connect(function()
-            createESP(player)
-        end)
-    end
-end)
+-- Execute a função ESP de nomes
+espNomes()
