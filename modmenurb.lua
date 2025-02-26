@@ -1,51 +1,36 @@
--- Script ESP para desenhar linhas até jogadores em New Car Development Tycoon
-
-local RunService = game:GetService("RunService")
-local Players = game:GetService("Players")
-local LocalPlayer = Players.LocalPlayer
-local Camera = workspace.CurrentCamera
-
--- Função para criar uma linha
-local function criarLinha()
-    local linha = Drawing.new("Line")
-    linha.Visible = false
-    linha.Color = Color3.fromRGB(255, 0, 0)
-    linha.Thickness = 2
-    linha.Transparency = 1
-    return linha
+-- Função para criar um ESP (Extra Sensory Perception) para um jogador
+local function createESP(player)
+    local highlight = Instance.new("Highlight")
+    highlight.Parent = player.Character
+    highlight.FillColor = Color3.fromRGB(255, 0, 0) -- Cor vermelha
+    highlight.FillTransparency = 0.5
+    highlight.OutlineColor = Color3.fromRGB(255, 255, 255) -- Cor branca
+    highlight.OutlineTransparency = 0
 end
 
--- Função para atualizar a posição da linha
-local function atualizarLinha(linha, objeto)
-    local pos, visivel = Camera:WorldToViewportPoint(objeto.Position)
-    if visivel then
-        linha.From = Vector2.new(Camera.ViewportSize.X / 2, Camera.ViewportSize.Y / 2)
-        linha.To = Vector2.new(pos.X, pos.Y)
-        linha.Visible = true
-    else
-        linha.Visible = false
+-- Função para remover o ESP de um jogador
+local function removeESP(player)
+    if player.Character then
+        local highlight = player.Character:FindFirstChildOfClass("Highlight")
+        if highlight then
+            highlight:Destroy()
+        end
     end
 end
 
--- Função principal para criar e atualizar linhas até jogadores
-local function espLinhas()
-    local linhas = {}
+-- Adiciona ESP para todos os jogadores atuais
+for _, player in pairs(game.Players:GetPlayers()) do
+    createESP(player)
+end
 
-    -- Crie linhas para todos os jogadores
-    for _, jogador in pairs(Players:GetPlayers()) do
-        if jogador ~= LocalPlayer and jogador.Character and jogador.Character:FindFirstChild("HumanoidRootPart") then
-            local linha = criarLinha()
-            table.insert(linhas, {linha = linha, objeto = jogador.Character.HumanoidRootPart})
-        end
-    end
-
-    -- Atualize a posição das linhas a cada frame
-    RunService.RenderStepped:Connect(function()
-        for _, item in pairs(linhas) do
-            atualizarLinha(item.linha, item.objeto)
-        end
+-- Adiciona ESP para novos jogadores que entrarem no jogo
+game.Players.PlayerAdded:Connect(function(player)
+    player.CharacterAdded:Connect(function()
+        createESP(player)
     end)
-end
+end)
 
--- Execute a função ESP de linhas
-espLinhas()
+-- Remove ESP quando um jogador sair do jogo
+game.Players.PlayerRemoving:Connect(function(player)
+    removeESP(player)
+end)
