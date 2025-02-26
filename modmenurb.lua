@@ -109,9 +109,12 @@ local function criarModMenu()
         if checked then
             -- Código para aumentar a velocidade do carro
             print("Aumentar Velocidade do Carro ativado")
+            -- Código do arquivo AUMENTAR A VELOCIDADE DO CARRO.LUA
+            -- (adicione aqui o código específico para aumentar a velocidade do carro)
         else
             -- Código para desativar o aumento de velocidade do carro
             print("Aumentar Velocidade do Carro desativado")
+            -- (adicione aqui o código específico para desativar o aumento de velocidade do carro)
         end
     end)
     posY = posY + 40
@@ -131,9 +134,12 @@ local function criarModMenu()
         if checked then
             -- Código para iniciar o farme solo
             print("Farme Solo ativado")
+            -- Código do arquivo FARME SOLO.LUA
+            -- (adicione aqui o código específico para iniciar o farme solo)
         else
             -- Código para parar o farme solo
             print("Farme Solo desativado")
+            -- (adicione aqui o código específico para parar o farme solo)
         end
     end)
     posY = posY + 40
@@ -153,7 +159,7 @@ local function criarModMenu()
         if checked then
             -- Código para ativar ESP Caixa
             print("ESP Caixa ativado")
-            -- Código do ESP Caixa
+            -- Código do arquivo ESP CAIXA.LUA
             local RunService = game:GetService("RunService")
             local Players = game:GetService("Players")
             local LocalPlayer = Players.LocalPlayer
@@ -212,7 +218,7 @@ local function criarModMenu()
         if checked then
             -- Código para ativar ESP Distância
             print("ESP Distância ativado")
-            -- Código do ESP Distância
+            -- Código do arquivo ESP DISTANCIA.LUA
             local RunService = game:GetService("RunService")
             local Players = game:GetService("Players")
             local LocalPlayer = Players.LocalPlayer
@@ -278,7 +284,7 @@ local function criarModMenu()
         if checked then
             -- Código para ativar ESP Nome
             print("ESP Nome ativado")
-            -- Código do ESP Nome
+            -- Código do arquivo ESP NOME.LUA
             local RunService = game:GetService("RunService")
             local Players = game:GetService("Players")
             local LocalPlayer = Players.LocalPlayer
@@ -331,7 +337,7 @@ local function criarModMenu()
         if checked then
             -- Código para ativar ESP Esqueleto
             print("ESP Esqueleto ativado")
-            -- Código do ESP Esqueleto
+            -- Código do arquivo ESP SQUELETO.LUA
             local Players = game:GetService("Players")
             local LocalPlayer = Players.LocalPlayer
 
@@ -373,7 +379,7 @@ local function criarModMenu()
         if checked then
             -- Código para ativar ESP Linhas
             print("ESP Linhas ativado")
-            -- Código do ESP Linhas
+            -- Código do arquivo ESP LINHAS.LUA
             local RunService = game:GetService("RunService")
             local Players = game:GetService("Players")
             local LocalPlayer = Players.LocalPlayer
