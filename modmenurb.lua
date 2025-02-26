@@ -1,8 +1,20 @@
--- Script de farm para carro correndo infinitamente em New Car Development Tycoon
+-- Script de farm para qualquer carro correndo infinitamente em New Car Development Tycoon
 
 local Players = game:GetService("Players")
 local LocalPlayer = Players.LocalPlayer
 local RunService = game:GetService("RunService")
+
+-- Função para encontrar o carro do jogador
+local function encontrarCarro()
+    for _, objeto in pairs(workspace:GetChildren()) do
+        if objeto:IsA("Model") and objeto:FindFirstChild("Humanoid") and objeto:FindFirstChild("HumanoidRootPart") then
+            if objeto:FindFirstChild("Owner") and objeto.Owner.Value == LocalPlayer then
+                return objeto
+            end
+        end
+    end
+    return nil
+end
 
 -- Função para teletransportar o carro para um mundo diferente
 local function teletransportarCarro(carro)
@@ -22,7 +34,7 @@ end
 
 -- Função principal para iniciar o farm
 local function iniciarFarm()
-    local carro = LocalPlayer.Character:FindFirstChild("Carro") -- Substitua "Carro" pelo nome do modelo do carro
+    local carro = encontrarCarro()
     if carro then
         teletransportarCarro(carro)
         correrInfinitamente(carro)
