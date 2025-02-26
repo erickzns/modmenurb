@@ -20,7 +20,7 @@ end
 local function atualizarQuadro(quadro, objeto)
     local pos, visivel = Camera:WorldToViewportPoint(objeto.Position)
     if visivel then
-        quadro.Size = Vector2.new(50, 50) -- Ajuste o tamanho conforme necessário
+        quadro.Size = Vector2.new(50, 40) -- Ajuste o tamanho conforme necessário
         quadro.Position = Vector2.new(pos.X - quadro.Size.X / 2, pos.Y - quadro.Size.Y / 2)
         quadro.Visible = true
     else
