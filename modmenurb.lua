@@ -1,40 +1,58 @@
--- Script para aumentar a velocidade do veículo em New Car Development Tycoon
+-- Script para criar um Mod Menu flutuante em New Car Development Tycoon
 
 local Players = game:GetService("Players")
 local LocalPlayer = Players.LocalPlayer
-local Workspace = game:GetService("Workspace")
+local PlayerGui = LocalPlayer:WaitForChild("PlayerGui")
 
--- Função para encontrar o veículo do jogador
-local function encontrarVeiculo()
-    for _, objeto in pairs(Workspace:GetChildren()) do
-        if objeto:IsA("Model") and objeto:FindFirstChild("VehicleSeat") then
-            if objeto:FindFirstChild("Owner") and objeto.Owner.Value == LocalPlayer then
-                return objeto
-            end
-        end
-    end
-    return nil
+-- Função para criar o Mod Menu
+local function criarModMenu()
+    -- Criar ScreenGui
+    local screenGui = Instance.new("ScreenGui")
+    screenGui.Name = "ModMenu"
+    screenGui.Parent = PlayerGui
+
+    -- Criar Frame do Menu
+    local menuFrame = Instance.new("Frame")
+    menuFrame.Size = UDim2.new(0, 200, 0, 300)
+    menuFrame.Position = UDim2.new(0, 50, 0, 50)
+    menuFrame.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+    menuFrame.BackgroundTransparency = 0.5
+    menuFrame.Visible = false
+    menuFrame.Parent = screenGui
+
+    -- Criar Botão de Abrir Menu
+    local abrirButton = Instance.new("TextButton")
+    abrirButton.Size = UDim2.new(0, 50, 0, 50)
+    abrirButton.Position = UDim2.new(0, 10, 0, 10)
+    abrirButton.Text = "+"
+    abrirButton.TextScaled = true
+    abrirButton.BackgroundColor3 = Color3.fromRGB(0, 255, 0)
+    abrirButton.Parent = screenGui
+
+    -- Criar Botão de Minimizar Menu
+    local minimizarButton = Instance.new("TextButton")
+    minimizarButton.Size = UDim2.new(0, 50, 0, 50)
+    minimizarButton.Position = UDim2.new(0, 10, 0, 10)
+    minimizarButton.Text = "-"
+    minimizarButton.TextScaled = true
+    minimizarButton.BackgroundColor3 = Color3.fromRGB(255, 0, 0)
+    minimizarButton.Visible = false
+    minimizarButton.Parent = screenGui
+
+    -- Função para abrir o menu
+    abrirButton.MouseButton1Click:Connect(function()
+        menuFrame.Visible = true
+        abrirButton.Visible = false
+        minimizarButton.Visible = true
+    end)
+
+    -- Função para minimizar o menu
+    minimizarButton.MouseButton1Click:Connect(function()
+        menuFrame.Visible = false
+        abrirButton.Visible = true
+        minimizarButton.Visible = false
+    end)
 end
 
--- Função para aumentar a velocidade do veículo
-local function aumentarVelocidade(veiculo, novaVelocidade)
-    if veiculo and veiculo:FindFirstChild("VehicleSeat") then
-        veiculo.VehicleSeat.MaxSpeed = novaVelocidade
-    else
-        warn("Veículo não encontrado ou não possui VehicleSeat!")
-    end
-end
-
--- Detectar quando o jogador entra em um veículo
-LocalPlayer.Character.ChildAdded:Connect(function(child)
-    if child:IsA("Model") and child:FindFirstChild("VehicleSeat") then
-        wait(1) -- Aguarde um momento para garantir que o jogador esteja totalmente no veículo
-        aumentarVelocidade(child, 100) -- Ajuste a velocidade conforme necessário
-    end
-end)
-
--- Aumentar a velocidade do veículo atual, se houver
-local veiculoAtual = encontrarVeiculo()
-if veiculoAtual then
-    aumentarVelocidade(veiculoAtual, 100) -- Ajuste a velocidade conforme necessário
-end
+-- Criar o Mod Menu
+criarModMenu()
