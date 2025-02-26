@@ -15,18 +15,6 @@ local function criarBasePlana(posicao)
     return base
 end
 
--- Função para encontrar o veículo do jogador
-local function encontrarVeiculo()
-    for _, objeto in pairs(Workspace:GetChildren()) do
-        if objeto:IsA("Model") and objeto:FindFirstChild("Humanoid") and objeto:FindFirstChild("HumanoidRootPart") then
-            if objeto:FindFirstChild("Owner") and objeto.Owner.Value == LocalPlayer then
-                return objeto
-            end
-        end
-    end
-    return nil
-end
-
 -- Função para teletransportar o veículo e o jogador para um mundo solo
 local function teletransportarParaMundoSolo(veiculo)
     local destino = Vector3.new(1000, 50, 1000) -- Coordenadas do mundo solo
@@ -45,9 +33,8 @@ local function correrInfinitamente(veiculo)
     end)
 end
 
--- Função principal para iniciar o farm
-local function iniciarFarm()
-    local veiculo = encontrarVeiculo()
+-- Função para iniciar o farm quando o jogador entrar em um veículo
+local function iniciarFarm(veiculo)
     if veiculo then
         teletransportarParaMundoSolo(veiculo)
         correrInfinitamente(veiculo)
@@ -56,5 +43,10 @@ local function iniciarFarm()
     end
 end
 
--- Iniciar o farm
-iniciarFarm()
+-- Detectar quando o jogador entra em um veículo
+LocalPlayer.Character.ChildAdded:Connect(function(child)
+    if child:IsA("Model") and child:FindFirstChild("Humanoid") and child:FindFirstChild("HumanoidRootPart") then
+        wait(1) -- Aguarde um momento para garantir que o jogador esteja totalmente no veículo
+        iniciarFarm(child)
+    end
+end)
