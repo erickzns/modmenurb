@@ -28,7 +28,7 @@ local function criarDistancia(jogador)
 
         -- Atualizar a distância a cada frame
         RunService.RenderStepped:Connect(function()
-            if char and char:FindFirstChild("HumanoidRootPart") then
+            if char and char:FindFirstChild("HumanoidRootPart") and LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
                 local distancia = (LocalPlayer.Character.HumanoidRootPart.Position - char.HumanoidRootPart.Position).Magnitude
                 textLabel.Text = string.format("Distância: %.2f", distancia)
             end
@@ -41,7 +41,12 @@ local function espDistancia()
     -- Crie a distância para todos os jogadores
     for _, jogador in pairs(Players:GetPlayers()) do
         if jogador ~= LocalPlayer then
-            criarDistancia(jogador)
+            jogador.CharacterAdded:Connect(function()
+                criarDistancia(jogador)
+            end)
+            if jogador.Character then
+                criarDistancia(jogador)
+            end
         end
     end
 
