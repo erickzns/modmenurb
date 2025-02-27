@@ -18,15 +18,19 @@ end
 
 -- Função para atualizar a posição do quadro
 local function atualizarQuadro(quadro, objeto)
-    local pos, visivel = Camera:WorldToViewportPoint(objeto.Position)
-    if visivel then
-        local humanoid = objeto.Parent:FindFirstChildOfClass("Humanoid")
-        if humanoid then
-            local altura = humanoid.HipHeight * 2 + humanoid.HumanoidRootPart.Size.Y
-            local largura = altura / 2 -- Ajuste a proporção conforme necessário
-            quadro.Size = Vector2.new(largura, altura)
-            quadro.Position = Vector2.new(pos.X - quadro.Size.X / 2, pos.Y - quadro.Size.Y / 2)
-            quadro.Visible = true
+    if objeto and objeto.Parent then
+        local pos, visivel = Camera:WorldToViewportPoint(objeto.Position)
+        if visivel then
+            local humanoid = objeto.Parent:FindFirstChildOfClass("Humanoid")
+            if humanoid then
+                local altura = humanoid.HipHeight * 2 + humanoid.HumanoidRootPart.Size.Y
+                local largura = altura / 2 -- Ajuste a proporção conforme necessário
+                quadro.Size = Vector2.new(largura, altura)
+                quadro.Position = Vector2.new(pos.X - quadro.Size.X / 2, pos.Y - quadro.Size.Y / 2)
+                quadro.Visible = true
+            end
+        else
+            quadro.Visible = false
         end
     else
         quadro.Visible = false
@@ -48,10 +52,26 @@ local function esp()
     -- Atualize a posição dos quadros a cada frame
     RunService.RenderStepped:Connect(function()
         for _, item in pairs(quadros) do
-            if item.objeto.Parent and item.objeto.Parent:FindFirstChild("HumanoidRootPart") then
-                atualizarQuadro(item.quadro, item.objeto)
-            else
-                item.quadro.Visible = false
+            atualizarQuadro(item.quadro, item.objeto)
+        end
+    end)
+
+    -- Atualize a lista de jogadores quando um novo jogador entrar
+    Players.PlayerAdded:Connect(function(jogador)
+        jogador.CharacterAdded:Connect(function(character)
+            local humanoidRootPart = character:WaitForChild("HumanoidRootPart")
+            local quadro = criarQuadro()
+            table.insert(quadros, {quadro = quadro, objeto = humanoidRootPart})
+        end)
+    end)
+
+    -- Remova quadros quando um jogador sair
+    Players.PlayerRemoving:Connect(function(jogador)
+        for i, item in ipairs(quadros) do
+            if item.objeto.Parent == jogador.Character then
+                item.quadro:Remove()
+                table.remove(quadros, i)
+                break
             end
         end
     end)
