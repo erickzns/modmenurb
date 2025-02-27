@@ -1,6 +1,6 @@
 -- Função para criar um ESP para um jogador
 local function createESP(player)
-    if player.Character then
+    if player.Character and player.Character:FindFirstChild("HumanoidRootPart") then
         -- Criar a caixa ao redor do jogador
         local box = Instance.new("BoxHandleAdornment")
         box.Size = player.Character:GetExtentsSize()
@@ -14,7 +14,7 @@ local function createESP(player)
         -- Criar a linha que conecta o jogador à câmera
         local attachment0 = Instance.new("Attachment")
         attachment0.Position = Vector3.new(0, player.Character:GetExtentsSize().Y / 2, 0)
-        attachment0.Parent = player.Character.PrimaryPart
+        attachment0.Parent = player.Character.HumanoidRootPart
 
         local attachment1 = Instance.new("Attachment")
         attachment1.Parent = workspace.CurrentCamera
@@ -26,7 +26,7 @@ local function createESP(player)
         beam.Width0 = 0.1
         beam.Width1 = 0.1
         beam.Transparency = NumberSequence.new(0.5)
-        beam.Parent = player.Character.PrimaryPart
+        beam.Parent = player.Character.HumanoidRootPart
     end
 end
 
@@ -38,12 +38,12 @@ local function removeESP(player)
             box:Destroy()
         end
 
-        local beam = player.Character.PrimaryPart:FindFirstChildOfClass("Beam")
+        local beam = player.Character:FindFirstChildOfClass("Beam")
         if beam then
             beam:Destroy()
         end
 
-        local attachment0 = player.Character.PrimaryPart:FindFirstChildOfClass("Attachment")
+        local attachment0 = player.Character:FindFirstChildOfClass("Attachment")
         if attachment0 then
             attachment0:Destroy()
         end
