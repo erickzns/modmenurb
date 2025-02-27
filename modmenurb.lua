@@ -256,6 +256,48 @@ local function criarModMenu()
         linhas = {}
     end
 
+    -- Função para ativar ESP Distância
+    local function ativarESPDistancia()
+        -- Código para ativar ESP Distância
+        print("ESP Distância ativado")
+        -- (adicione aqui o código específico para ativar ESP Distância)
+    end
+
+    -- Função para desativar ESP Distância
+    local function desativarESPDistancia()
+        -- Código para desativar ESP Distância
+        print("ESP Distância desativado")
+        -- (adicione aqui o código específico para desativar ESP Distância)
+    end
+
+    -- Função para ativar ESP Nome
+    local function ativarESPNome()
+        -- Código para ativar ESP Nome
+        print("ESP Nome ativado")
+        -- (adicione aqui o código específico para ativar ESP Nome)
+    end
+
+    -- Função para desativar ESP Nome
+    local function desativarESPNome()
+        -- Código para desativar ESP Nome
+        print("ESP Nome desativado")
+        -- (adicione aqui o código específico para desativar ESP Nome)
+    end
+
+    -- Função para ativar ESP Esqueleto
+    local function ativarESPEsqueleto()
+        -- Código para ativar ESP Esqueleto
+        print("ESP Esqueleto ativado")
+        -- (adicione aqui o código específico para ativar ESP Esqueleto)
+    end
+
+    -- Função para desativar ESP Esqueleto
+    local function desativarESPEsqueleto()
+        -- Código para desativar ESP Esqueleto
+        print("ESP Esqueleto desativado")
+        -- (adicione aqui o código específico para desativar ESP Esqueleto)
+    end
+
     -- Checkbox ESP Caixa
     criarCheckbox(scrollingFrame, "ESP Caixa", UDim2.new(0, 25, 0, posY), function(checked)
         if checked then
@@ -283,13 +325,9 @@ local function criarModMenu()
     -- Checkbox ESP Distância
     criarCheckbox(scrollingFrame, "ESP Distância", UDim2.new(0, 25, 0, posY), function(checked)
         if checked then
-            -- Código para ativar ESP Distância
-            print("ESP Distância ativado")
-            -- (adicione aqui o código específico para ativar ESP Distância)
+            ativarESPDistancia()
         else
-            -- Código para desativar ESP Distância
-            print("ESP Distância desativado")
-            -- (adicione aqui o código específico para desativar ESP Distância)
+            desativarESPDistancia()
         end
     end)
     posY = posY + 40
@@ -297,13 +335,9 @@ local function criarModMenu()
     -- Checkbox ESP Nome
     criarCheckbox(scrollingFrame, "ESP Nome", UDim2.new(0, 25, 0, posY), function(checked)
         if checked then
-            -- Código para ativar ESP Nome
-            print("ESP Nome ativado")
-            -- (adicione aqui o código específico para ativar ESP Nome)
+            ativarESPNome()
         else
-            -- Código para desativar ESP Nome
-            print("ESP Nome desativado")
-            -- (adicione aqui o código específico para desativar ESP Nome)
+            desativarESPNome()
         end
     end)
     posY = posY + 40
@@ -311,13 +345,9 @@ local function criarModMenu()
     -- Checkbox ESP Esqueleto
     criarCheckbox(scrollingFrame, "ESP Esqueleto", UDim2.new(0, 25, 0, posY), function(checked)
         if checked then
-            -- Código para ativar ESP Esqueleto
-            print("ESP Esqueleto ativado")
-            -- (adicione aqui o código específico para ativar ESP Esqueleto)
+            ativarESPEsqueleto()
         else
-            -- Código para desativar ESP Esqueleto
-            print("ESP Esqueleto desativado")
-            -- (adicione aqui o código específico para desativar ESP Esqueleto)
+            desativarESPEsqueleto()
         end
     end)
     posY = posY + 40
