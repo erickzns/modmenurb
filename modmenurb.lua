@@ -278,6 +278,49 @@ local function criarModMenu()
             print("ESP Linhas desativado")
         end
     end)
+
+    -- Manter as outras funções ESP
+    -- Checkbox ESP Distância
+    criarCheckbox(scrollingFrame, "ESP Distância", UDim2.new(0, 25, 0, posY), function(checked)
+        if checked then
+            -- Código para ativar ESP Distância
+            print("ESP Distância ativado")
+            -- (adicione aqui o código específico para ativar ESP Distância)
+        else
+            -- Código para desativar ESP Distância
+            print("ESP Distância desativado")
+            -- (adicione aqui o código específico para desativar ESP Distância)
+        end
+    end)
+    posY = posY + 40
+
+    -- Checkbox ESP Nome
+    criarCheckbox(scrollingFrame, "ESP Nome", UDim2.new(0, 25, 0, posY), function(checked)
+        if checked then
+            -- Código para ativar ESP Nome
+            print("ESP Nome ativado")
+            -- (adicione aqui o código específico para ativar ESP Nome)
+        else
+            -- Código para desativar ESP Nome
+            print("ESP Nome desativado")
+            -- (adicione aqui o código específico para desativar ESP Nome)
+        end
+    end)
+    posY = posY + 40
+
+    -- Checkbox ESP Esqueleto
+    criarCheckbox(scrollingFrame, "ESP Esqueleto", UDim2.new(0, 25, 0, posY), function(checked)
+        if checked then
+            -- Código para ativar ESP Esqueleto
+            print("ESP Esqueleto ativado")
+            -- (adicione aqui o código específico para ativar ESP Esqueleto)
+        else
+            -- Código para desativar ESP Esqueleto
+            print("ESP Esqueleto desativado")
+            -- (adicione aqui o código específico para desativar ESP Esqueleto)
+        end
+    end)
+    posY = posY + 40
 end
 
 -- Criar o Mod Menu
