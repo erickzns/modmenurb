@@ -3,6 +3,8 @@
 local Players = game:GetService("Players")
 local LocalPlayer = Players.LocalPlayer
 local PlayerGui = LocalPlayer:WaitForChild("PlayerGui")
+local RunService = game:GetService("RunService")
+local Camera = workspace.CurrentCamera
 
 -- Função para criar um checkbox
 local function criarCheckbox(parent, text, posicao, callback)
@@ -154,222 +156,114 @@ local function criarModMenu()
     tituloESP.Parent = scrollingFrame
     posY = posY + 40
 
+    -- Variáveis para armazenar os quadros e linhas
+    local quadros = {}
+    local linhas = {}
+
+    -- Função para criar um quadro
+    local function criarQuadro()
+        local quadro = Drawing.new("Square")
+        quadro.Visible = false
+        quadro.Color = Color3.fromRGB(255, 0, 0)
+        quadro.Thickness = 2
+        quadro.Transparency = 1
+        quadro.Filled = false
+        return quadro
+    end
+
+    -- Função para atualizar um quadro
+    local function atualizarQuadro(quadro, objeto)
+        local pos, visivel = Camera:WorldToViewportPoint(objeto.Position)
+        if visivel then
+            local humanoid = objeto.Parent:FindFirstChildOfClass("Humanoid")
+            if humanoid then
+                local altura = humanoid.HipHeight * 2 + humanoid.HumanoidRootPart.Size.Y
+                local largura = altura / 2
+                quadro.Size = Vector2.new(largura, altura)
+                quadro.Position = Vector2.new(pos.X - quadro.Size.X / 2, pos.Y - quadro.Size.Y / 2)
+                quadro.Visible = true
+            end
+        else
+            quadro.Visible = false
+        end
+    end
+
+    -- Função para ativar ESP Caixa
+    local function ativarESPCaixa()
+        for _, jogador in pairs(Players:GetPlayers()) do
+            if jogador ~= LocalPlayer and jogador.Character and jogador.Character:FindFirstChild("HumanoidRootPart") then
+                local quadro = criarQuadro()
+                table.insert(quadros, {quadro = quadro, objeto = jogador.Character.HumanoidRootPart})
+            end
+        end
+        RunService.RenderStepped:Connect(function()
+            for _, item in pairs(quadros) do
+                atualizarQuadro(item.quadro, item.objeto)
+            end
+        end)
+    end
+
+    -- Função para desativar ESP Caixa
+    local function desativarESPCaixa()
+        for _, item in pairs(quadros) do
+            item.quadro.Visible = false
+        end
+        quadros = {}
+    end
+
+    -- Função para criar uma linha
+    local function criarLinha()
+        local linha = Drawing.new("Line")
+        linha.Visible = false
+        linha.Color = Color3.fromRGB(255, 0, 0)
+        linha.Thickness = 2
+        linha.Transparency = 1
+        return linha
+    end
+
+    -- Função para atualizar uma linha
+    local function atualizarLinha(linha, objeto)
+        local pos, visivel = Camera:WorldToViewportPoint(objeto.Position)
+        if visivel then
+            linha.From = Vector2.new(Camera.ViewportSize.X / 2, Camera.ViewportSize.Y / 2)
+            linha.To = Vector2.new(pos.X, pos.Y)
+            linha.Visible = true
+        else
+            linha.Visible = false
+        end
+    end
+
+    -- Função para ativar ESP Linhas
+    local function ativarESPLinhas()
+        for _, jogador in pairs(Players:GetPlayers()) do
+            if jogador ~= LocalPlayer and jogador.Character and jogador.Character:FindFirstChild("HumanoidRootPart") then
+                local linha = criarLinha()
+                table.insert(linhas, {linha = linha, objeto = jogador.Character.HumanoidRootPart})
+            end
+        end
+        RunService.RenderStepped:Connect(function()
+            for _, item in pairs(linhas) do
+                atualizarLinha(item.linha, item.objeto)
+            end
+        end)
+    end
+
+    -- Função para desativar ESP Linhas
+    local function desativarESPLinhas()
+        for _, item in pairs(linhas) do
+            item.linha.Visible = false
+        end
+        linhas = {}
+    end
+
     -- Checkbox ESP Caixa
     criarCheckbox(scrollingFrame, "ESP Caixa", UDim2.new(0, 25, 0, posY), function(checked)
         if checked then
-            -- Código para ativar ESP Caixa
+            ativarESPCaixa()
             print("ESP Caixa ativado")
-            -- Código do ESP Caixa
-            local RunService = game:GetService("RunService")
-            local Players = game:GetService("Players")
-            local LocalPlayer = Players.LocalPlayer
-            local Camera = workspace.CurrentCamera
-
-            local function criarQuadro()
-                local quadro = Drawing.new("Square")
-                quadro.Visible = false
-                quadro.Color = Color3.fromRGB(255, 0, 0)
-                quadro.Thickness = 2
-                quadro.Transparency = 1
-                quadro.Filled = false
-                return quadro
-            end
-
-            local function atualizarQuadro(quadro, objeto)
-                local pos, visivel = Camera:WorldToViewportPoint(objeto.Position)
-                if visivel then
-                    local humanoid = objeto.Parent:FindFirstChildOfClass("Humanoid")
-                    if humanoid then
-                        local altura = humanoid.HipHeight * 2 + humanoid.HumanoidRootPart.Size.Y
-                        local largura = altura / 2
-                        quadro.Size = Vector2.new(largura, altura)
-                        quadro.Position = Vector2.new(pos.X - quadro.Size.X / 2, pos.Y - quadro.Size.Y / 2)
-                        quadro.Visible = true
-                    end
-                else
-                    quadro.Visible = false
-                end
-            end
-
-            local function esp()
-                local quadros = {}
-                for _, jogador in pairs(Players:GetPlayers()) do
-                    if jogador ~= LocalPlayer and jogador.Character and jogador.Character:FindFirstChild("HumanoidRootPart") then
-                        local quadro = criarQuadro()
-                        table.insert(quadros, {quadro = quadro, objeto = jogador.Character.HumanoidRootPart})
-                    end
-                end
-                RunService.RenderStepped:Connect(function()
-                    for _, item in pairs(quadros) do
-                        atualizarQuadro(item.quadro, item.objeto)
-                    end
-                end)
-            end
-
-            esp()
         else
+            desativarESPCaixa()
             print("ESP Caixa desativado")
-        end
-    end)
-    posY = posY + 40
-
-    -- Checkbox ESP Distância
-    criarCheckbox(scrollingFrame, "ESP Distância", UDim2.new(0, 25, 0, posY), function(checked)
-        if checked then
-            -- Código para ativar ESP Distância
-            print("ESP Distância ativado")
-            -- Código do ESP Distância
-            local RunService = game:GetService("RunService")
-            local Players = game:GetService("Players")
-            local LocalPlayer = Players.LocalPlayer
-
-            local function criarDistancia(jogador)
-                local char = jogador.Character
-                if char and char:FindFirstChild("Head") then
-                    local head = char.Head
-                    local billboard = Instance.new("BillboardGui")
-                    billboard.Adornee = head
-                    billboard.Size = UDim2.new(0, 100, 0, 50)
-                    billboard.StudsOffset = Vector3.new(0, 2, 0)
-                    billboard.AlwaysOnTop = true
-
-                    local textLabel = Instance.new("TextLabel")
-                    textLabel.Parent = billboard
-                    textLabel.Size = UDim2.new(1, 0, 1, 0)
-                    textLabel.BackgroundTransparency = 1
-                    textLabel.TextColor3 = Color3.fromRGB(255, 0, 0)
-                    textLabel.TextScaled = true
-                    textLabel.Font = Enum.Font.SourceSans
-                    textLabel.TextSize = 14
-
-                    billboard.Parent = head
-
-                    RunService.RenderStepped:Connect(function()
-                        if char and char:FindFirstChild("HumanoidRootPart") and LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
-                            local distancia = (LocalPlayer.Character.HumanoidRootPart.Position - char.HumanoidRootPart.Position).Magnitude
-                            textLabel.Text = string.format("Distância: %.2f", distancia)
-                        end
-                    end)
-                end
-            end
-
-            local function espDistancia()
-                for _, jogador in pairs(Players:GetPlayers()) do
-                    if jogador ~= LocalPlayer then
-                        jogador.CharacterAdded:Connect(function()
-                            criarDistancia(jogador)
-                        end)
-                        if jogador.Character then
-                            criarDistancia(jogador)
-                        end
-                    end
-                end
-
-                Players.PlayerAdded:Connect(function(jogador)
-                    jogador.CharacterAdded:Connect(function()
-                        criarDistancia(jogador)
-                    end)
-                end)
-            end
-
-            espDistancia()
-        else
-            print("ESP Distância desativado")
-        end
-    end)
-    posY = posY + 40
-
-    -- Checkbox ESP Nome
-    criarCheckbox(scrollingFrame, "ESP Nome", UDim2.new(0, 25, 0, posY), function(checked)
-        if checked then
-            -- Código para ativar ESP Nome
-            print("ESP Nome ativado")
-            -- Código do ESP Nome
-            local RunService = game:GetService("RunService")
-            local Players = game:GetService("Players")
-            local LocalPlayer = Players.LocalPlayer
-
-            local function criarNome(jogador)
-                local char = jogador.Character
-                if char and char:FindFirstChild("Head") then
-                    local head = char.Head
-                    local billboard = Instance.new("BillboardGui")
-                    billboard.Adornee = head
-                    billboard.Size = UDim2.new(0, 100, 0, 50)
-                    billboard.StudsOffset = Vector3.new(0, 2, 0)
-                    billboard.AlwaysOnTop = true
-
-                    local textLabel = Instance.new("TextLabel")
-                    textLabel.Parent = billboard
-                    textLabel.Size = UDim2.new(1, 0, 1, 0)
-                    textLabel.BackgroundTransparency = 1
-                    textLabel.Text = jogador.Name
-                    textLabel.TextColor3 = Color3.fromRGB(255, 0, 0)
-                    textLabel.TextScaled = true
-
-                    billboard.Parent = head
-                end
-            end
-
-            local function espNomes()
-                for _, jogador in pairs(Players:GetPlayers()) do
-                    if jogador ~= LocalPlayer then
-                        criarNome(jogador)
-                    end
-                end
-
-                Players.PlayerAdded:Connect(function(jogador)
-                    jogador.CharacterAdded:Connect(function()
-                        criarNome(jogador)
-                    end)
-                end)
-            end
-
-            espNomes()
-        else
-            print("ESP Nome desativado")
-        end
-    end)
-    posY = posY + 40
-
-    -- Checkbox ESP Esqueleto
-    criarCheckbox(scrollingFrame, "ESP Esqueleto", UDim2.new(0, 25, 0, posY), function(checked)
-        if checked then
-            -- Código para ativar ESP Esqueleto
-            print("ESP Esqueleto ativado")
-            -- Código do ESP Esqueleto
-            local Players = game:GetService("Players")
-            local LocalPlayer = Players.LocalPlayer
-
-            local function createESP(player)
-                if player.Character then
-                    local highlight = Instance.new("Highlight")
-                    highlight.Parent = player.Character
-                    highlight.FillColor = Color3.fromRGB(255, 0, 0)
-                    highlight.FillTransparency = 0.5
-                    highlight.OutlineColor = Color3.fromRGB(255, 255, 255)
-                    highlight.OutlineTransparency = 0
-                end
-            end
-
-            for _, player in pairs(Players:GetPlayers()) do
-                if player ~= LocalPlayer then
-                    createESP(player)
-                    player.CharacterAdded:Connect(function()
-                        createESP(player)
-                    end)
-                end
-            end
-
-            Players.PlayerAdded:Connect(function(player)
-                if player ~= LocalPlayer then
-                    player.CharacterAdded:Connect(function()
-                        createESP(player)
-                    end)
-                end
-            end)
-        else
-            print("ESP Esqueleto desativado")
         end
     end)
     posY = posY + 40
@@ -377,51 +271,10 @@ local function criarModMenu()
     -- Checkbox ESP Linhas
     criarCheckbox(scrollingFrame, "ESP Linhas", UDim2.new(0, 25, 0, posY), function(checked)
         if checked then
-            -- Código para ativar ESP Linhas
+            ativarESPLinhas()
             print("ESP Linhas ativado")
-            -- Código do ESP Linhas
-            local RunService = game:GetService("RunService")
-            local Players = game:GetService("Players")
-            local LocalPlayer = Players.LocalPlayer
-            local Camera = workspace.CurrentCamera
-
-            local function criarLinha()
-                local linha = Drawing.new("Line")
-                linha.Visible = false
-                linha.Color = Color3.fromRGB(255, 0, 0)
-                linha.Thickness = 2
-                linha.Transparency = 1
-                return linha
-            end
-
-            local function atualizarLinha(linha, objeto)
-                local pos, visivel = Camera:WorldToViewportPoint(objeto.Position)
-                if visivel then
-                    linha.From = Vector2.new(Camera.ViewportSize.X / 2, Camera.ViewportSize.Y / 2)
-                    linha.To = Vector2.new(pos.X, pos.Y)
-                    linha.Visible = true
-                else
-                    linha.Visible = false
-                end
-            end
-
-            local function espLinhas()
-                local linhas = {}
-                for _, jogador in pairs(Players:GetPlayers()) do
-                    if jogador ~= LocalPlayer and jogador.Character and jogador.Character:FindFirstChild("HumanoidRootPart") then
-                        local linha = criarLinha()
-                        table.insert(linhas, {linha = linha, objeto = jogador.Character.HumanoidRootPart})
-                    end
-                end
-                RunService.RenderStepped:Connect(function()
-                    for _, item in pairs(linhas) do
-                        atualizarLinha(item.linha, item.objeto)
-                    end
-                end)
-            end
-
-            espLinhas()
         else
+            desativarESPLinhas()
             print("ESP Linhas desativado")
         end
     end)
