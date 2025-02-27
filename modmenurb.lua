@@ -278,8 +278,8 @@ local function criarModMenu()
             print("ESP Linhas desativado")
         end
     end)
+    posY = posY + 40
 
-    -- Manter as outras funções ESP
     -- Checkbox ESP Distância
     criarCheckbox(scrollingFrame, "ESP Distância", UDim2.new(0, 25, 0, posY), function(checked)
         if checked then
