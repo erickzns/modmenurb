@@ -48,7 +48,11 @@ local function esp()
     -- Atualize a posição dos quadros a cada frame
     RunService.RenderStepped:Connect(function()
         for _, item in pairs(quadros) do
-            atualizarQuadro(item.quadro, item.objeto)
+            if item.objeto.Parent and item.objeto.Parent:FindFirstChild("HumanoidRootPart") then
+                atualizarQuadro(item.quadro, item.objeto)
+            else
+                item.quadro.Visible = false
+            end
         end
     end)
 end
