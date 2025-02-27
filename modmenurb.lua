@@ -159,7 +159,7 @@ local function criarModMenu()
         if checked then
             -- Código para ativar ESP Caixa
             print("ESP Caixa ativado")
-            -- Código do arquivo ESP CAIXA.LUA
+            -- Código do ESP Caixa
             local RunService = game:GetService("RunService")
             local Players = game:GetService("Players")
             local LocalPlayer = Players.LocalPlayer
@@ -218,7 +218,7 @@ local function criarModMenu()
         if checked then
             -- Código para ativar ESP Distância
             print("ESP Distância ativado")
-            -- Código do arquivo ESP DISTANCIA.LUA
+            -- Código do ESP Distância
             local RunService = game:GetService("RunService")
             local Players = game:GetService("Players")
             local LocalPlayer = Players.LocalPlayer
@@ -284,7 +284,7 @@ local function criarModMenu()
         if checked then
             -- Código para ativar ESP Nome
             print("ESP Nome ativado")
-            -- Código do arquivo ESP NOME.LUA
+            -- Código do ESP Nome
             local RunService = game:GetService("RunService")
             local Players = game:GetService("Players")
             local LocalPlayer = Players.LocalPlayer
@@ -337,7 +337,7 @@ local function criarModMenu()
         if checked then
             -- Código para ativar ESP Esqueleto
             print("ESP Esqueleto ativado")
-            -- Código do arquivo ESP SQUELETO.LUA
+            -- Código do ESP Esqueleto
             local Players = game:GetService("Players")
             local LocalPlayer = Players.LocalPlayer
 
@@ -379,7 +379,7 @@ local function criarModMenu()
         if checked then
             -- Código para ativar ESP Linhas
             print("ESP Linhas ativado")
-            -- Código do arquivo ESP LINHAS.LUA
+            -- Código do ESP Linhas
             local RunService = game:GetService("RunService")
             local Players = game:GetService("Players")
             local LocalPlayer = Players.LocalPlayer
