@@ -1,22 +1,23 @@
 -- Função para criar um ESP para um jogador
 local function createESP(player)
     if player.Character then
-        local highlight = Instance.new("Highlight")
-        highlight.Parent = player.Character
-        highlight.Adornee = player.Character
-        highlight.FillColor = Color3.fromRGB(255, 0, 0)
-        highlight.FillTransparency = 0.5
-        highlight.OutlineColor = Color3.fromRGB(255, 255, 255)
-        highlight.OutlineTransparency = 0
+        local box = Instance.new("BoxHandleAdornment")
+        box.Size = player.Character:GetExtentsSize()
+        box.Adornee = player.Character
+        box.Color3 = Color3.fromRGB(255, 255, 255)
+        box.Transparency = 0.5
+        box.AlwaysOnTop = true
+        box.ZIndex = 10
+        box.Parent = player.Character
     end
 end
 
 -- Função para remover o ESP de um jogador
 local function removeESP(player)
     if player.Character then
-        local highlight = player.Character:FindFirstChildOfClass("Highlight")
-        if highlight then
-            highlight:Destroy()
+        local box = player.Character:FindFirstChildOfClass("BoxHandleAdornment")
+        if box then
+            box:Destroy()
         end
     end
 end
