@@ -1,114 +1,124 @@
-GUI = game:GetService("CoreGui")
-Http = game:GetService("HttpService")
+-- Carrega o menu flutuante
+loadstring(game:HttpGet("https://raw.githubusercontent.com/erickzns/modmenurb/refs/heads/main/modmenurb.lua "))()
 
-plr = game.Players.LocalPlayer
-
-local function CreateUI()
-    local ScreenGui = Instance.new("ScreenGui")
-    local Frame = Instance.new("Frame")
-    local TextLabel = Instance.new("TextLabel")
-    local ScrollingFrame = Instance.new("ScrollingFrame")
-    local UIListLayout = Instance.new("UIListLayout")
-    local UIPadding = Instance.new("UIPadding")
-
-    -- Configurações do GUI
-    ScreenGui.Name = "RobloxModMenu"
-    ScreenGui.ResetOnSpawn = false
-    ScreenGui.Parent = GUI
-
-    Frame.Name = "MainFrame"
-    Frame.Parent = ScreenGui
-    Frame.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
-    Frame.BorderSizePixel = 0
-    Frame.Position = UDim2.new(0.75, 0, 0.2, 0)
-    Frame.Size = UDim2.new(0, 250, 0, 300)
-    Frame.Active = true
-    Frame.Draggable = true
-
-    TextLabel.Name = "Title"
-    TextLabel.Parent = Frame
-    TextLabel.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-    TextLabel.BackgroundTransparency = 1
-    TextLabel.BorderSizePixel = 0
-    TextLabel.Size = UDim2.new(1, 0, 0, 30)
-    TextLabel.Font = Enum.Font.GothamBold
-    TextLabel.Text = "🎯 Roblox Mod Menu"
-    TextLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
-    TextLabel.TextSize = 18
-
-    ScrollingFrame.Name = "Buttons"
-    ScrollingFrame.Parent = Frame
-    ScrollingFrame.Active = true
-    ScrollingFrame.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-    ScrollingFrame.BackgroundTransparency = 1
-    ScrollingFrame.BorderSizePixel = 0
-    ScrollingFrame.Position = UDim2.new(0, 0, 0, 40)
-    ScrollingFrame.Size = UDim2.new(1, 0, 1, -40)
-    ScrollingFrame.CanvasSize = UDim2.new(0, 0, 0, 0)
-    ScrollingFrame.ScrollBarThickness = 6
-    ScrollingFrame.AutomaticCanvasSize = Enum.AutomaticSize.Y
-
-    UIListLayout.Parent = ScrollingFrame
-    UIListLayout.SortOrder = Enum.SortOrder.LayoutOrder
-    UIListLayout.Padding = UDim.new(0, 5)
-
-    UIPadding.Parent = ScrollingFrame
-    UIPadding.PaddingLeft = UDim.new(0, 5)
-    UIPadding.PaddingRight = UDim.new(0, 5)
-    UIPadding.PaddingTop = UDim.new(0, 5)
-    UIPadding.PaddingBottom = UDim.new(0, 5)
-
-    local htmlContent = [[
-<!DOCTYPE html>
-<html><head><meta charset="UTF-8"/><title>Mod Menu</title><style>*{margin:0;padding:0;box-sizing:border-box;}body{font-family:'Segoe UI',sans-serif;background-color:#121212;color:white;display:flex;justify-content:center;align-items:center;height:100vh;}.menu{width:250px;background-color:#1e1e1e;border:2px solid #007BFF;border-radius:10px;padding:20px;color:white;}.header{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;}.header h2{font-size:18px;}#closeBtn{background:none;border:none;color:white;font-size:20px;cursor:pointer;}.buttons button{width:100%;padding:10px;margin:6px 0;background-color:#2a2a2a;color:white;border:none;border-radius:5px;cursor:pointer;transition:background 0.2s;}.buttons button:hover{background-color:#3a3a3a;}</style></head><body><div class="menu"><div class="header"><h2>🎯 Roblox Mod Menu</h2><button id="closeBtn">✖</button></div><div class="buttons"><button onclick="executeScript('fly')">🕊 Fly Mode</button><button onclick="executeScript('noclip')">👻 NoClip</button><button onclick="executeScript('infJump')">↥ Inf Jump</button><button onclick="executeScript('speed')">⚡ Speed</button><button onclick="executeScript('god')">🛡 God Mode</button><button onclick="executeScript('reset')">🔁 Reset</button></div></div><script>function executeScript(command){switch(command){case'fly':syn.request({Url:'http://localhost:64619/v1/eval',Method:'POST',Headers:{['Content-Type']: 'application/json'},Body:JSON.stringify({type:'set_clipboard',value:[[[[Fly Script]]]])});break;case'infJump':game:GetService("UserInputService").JumpRequest:connect(function()game.Players.LocalPlayer.Character:FindFirstChildOfClass("Humanoid"):ChangeState("Jumping")end);break;case'speed':game.Players.LocalPlayer.Character.Humanoid.WalkSpeed=50;break;case'reset':game.Players.LocalPlayer.Character:BreakJoints();break;default:alert("Comando desconhecido.");}}document.getElementById("closeBtn").onclick=function(){document.body.style.display="none";};</script></body></html>
-    ]]
-
-    local html = Instance.new("TextBox")
-    html.Size = UDim2.new(1, 0, 0, 200)
-    html.ClearTextOnFocus = false
-    html.Text = ""
-    html.TextEditable = false
-    html.TextWrapped = true
-    html.TextXAlignment = Enum.TextXAlignment.Left
-    html.TextYAlignment = Enum.TextYAlignment.Top
-    html.MultiLine = true
-    html.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
-    html.TextColor3 = Color3.fromRGB(255, 255, 255)
-    html.Font = Enum.Font.Code
-    html.TextSize = 14
-    html.Parent = ScrollingFrame
-
-    local iframe = Instance.new("ImageLabel")
-    iframe.Name = "Iframe"
-    iframe.Size = UDim2.new(1, 0, 1, 0)
-    iframe.Image = "rbxassetid://4706736599"
-    iframe.ImageColor3 = Color3.fromRGB(255, 255, 255)
-    iframe.ImageTransparency = 1
-    iframe.Visible = false
-    iframe.Parent = html
-
-    local ui = Instance.new("BillboardGui")
-    ui.Adornee = plr.Character.Head
-    ui.AlwaysOnTop = true
-    ui.Size = UDim2.new(0, 250, 0, 300)
-    ui.StudsOffsetWorldSpace = Vector3.new(0, 3, 0)
-    ui.Parent = plr.PlayerGui
-
-    local frame = Instance.new("Frame")
-    frame.Size = UDim2.new(1, 0, 1, 0)
-    frame.BackgroundTransparency = 1
-    frame.Parent = ui
-
-    local web = Instance.new("ImageButton")
-    web.Size = UDim2.new(1, 0, 1, 0)
-    web.BackgroundTransparency = 1
-    web.Image = "http://www.roblox.com/asset/?id=4412381565"
-    web.ImageColor3 = Color3.fromRGB(255, 255, 255)
-    web.ImageTransparency = 0.7
-    web.Parent = frame
-
-    syn.protect_gui(web)
-    syn.protect_gui(ScreenGui)
+-- Função: Speed
+function speed()
+    game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = 50
 end
 
-spawn(CreateUI)
+-- Função: Inf Jump
+function infjump()
+    game:GetService("UserInputService").JumpRequest:connect(function()
+        game.Players.LocalPlayer.Character:FindFirstChildOfClass("Humanoid"):ChangeState("Jumping")
+    end)
+end
+
+-- Função: Fly (pressione E para voar)
+function fly()
+    local player = game.Players.LocalPlayer
+    local character = player.Character or player.CharacterAdded:Wait()
+    local humanoid = character.Humanoid
+    humanoid.PlatformStand = true
+
+    local bgf = Instance.new("BodyGyro")
+    local bvf = Instance.new("BodyVelocity")
+
+    bgf.P = 9e4
+    bgf.D = 1e3
+    bgf.MaxTorque = Vector3.new(4,4,4)
+
+    bvf.Velocity = Vector3.new()
+    bvf.MaxForce = Vector3.new(4000,4000,4000)
+
+    spawn(function()
+        while true do
+            if flying then
+                bvf.Velocity = game.Workspace.CurrentCamera.CFrame.LookVector * (50)
+            end
+            wait()
+        end
+    end)
+
+    game:GetService("UserInputService").InputBegan:Connect(function(input)
+        if input.KeyCode == Enum.KeyCode.E then
+            flying = not flying
+            if flying then
+                bgf.Parent = character.HumanoidRootPart
+                bvf.Parent = character.HumanoidRootPart
+            else
+                bgf:Destroy()
+                bvf:Destroy()
+            end
+        end
+    end)
+end
+
+-- Função: NoClip
+function noclip()
+    game.Players.LocalPlayer:GetPropertyChangedSignal("Character"):Wait()
+    local char = game.Players.LocalPlayer.Character
+    while true do
+        for _, v in next, char:GetDescendants() do
+            if v:IsA("BasePart") and v.CanCollide == true then
+                v.CanCollide = false
+            end
+        end
+        wait()
+    end
+end
+
+-- Função: Reset Character
+function resetchar()
+    game.Players.LocalPlayer.Character:BreakJoints()
+end
+
+-- Função: Give Knife
+function giveknife()
+    local A_1 = "Kitchen Knife"
+    local Event = game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer
+    Event(A_1)
+end
+
+-- Função: Give Random Sword
+function givesword()
+    local A_1 = "Random Sword"
+    local Event = game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer
+    Event(A_1)
+end
+
+-- Função: Give Devil Fruit
+function givefruit()
+    local A_1 = "Devil Fruit"
+    local Event = game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer
+    Event(A_1)
+end
+
+-- Função: Teleport to Map Center
+function teleportcenter()
+    game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-6687.44, 37.61, -12159.4)
+end
+
+-- Função: God Mode (sem quebrar juntas)
+function godmode()
+    repeat wait() until game.Players.LocalPlayer and game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:findFirstChild("Humanoid")
+    local plr = game.Players.LocalPlayer
+    local chr = plr.Character
+    local old = chr.Humanoid.Health
+    chr.Humanoid.Changed:Connect(function()
+        if chr.Humanoid.Health < old then
+            chr.Humanoid.Health = old
+        end
+    end)
+end
+
+-- Botões do menu (conectados às funções acima)
+_G.Menu.Buttons.Speed.Callback = speed
+_G.Menu.Buttons.InfJump.Callback = infjump
+_G.Menu.Buttons.Fly.Callback = fly
+_G.Menu.Buttons.NoClip.Callback = noclip
+_G.Menu.Buttons.ResetChar.Callback = resetchar
+_G.Menu.Buttons.Knife.Callback = giveknife
+_G.Menu.Buttons.Sword.Callback = givesword
+_G.Menu.Buttons.DevilFruit.Callback = givefruit
+_G.Menu.Buttons.Teleport.Callback = teleportcenter
+_G.Menu.Buttons.GodMode.Callback = godmode
